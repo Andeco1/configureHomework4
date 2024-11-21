@@ -1,0 +1,6 @@
+LOAD a0 123
+LOAD a1 124
+READ a3 a1 2
+MOVE a3 a1
+SQRT a4 4 a1
+END
