@@ -12,6 +12,16 @@ public class Assembler {
         public Command() {
         }
 
+        @Override
+        public String toString() {
+            return "Command{" +
+                    "A=" + A +
+                    ", B=" + B +
+                    ", C=" + C +
+                    ", D=" + D +
+                    ", hex='" + hex + '\'' +
+                    '}';
+        }
     }
     private String pathInput, pathOutput, pathLog;
     FileReader reader;
@@ -50,8 +60,6 @@ public class Assembler {
             throw new RuntimeException(e);
         }
 
-        System.out.println(memory.toString());
-
     }
     private String[] getCommand(FileReader inputReader) throws IOException {
         String[] command = new String[4];
@@ -87,12 +95,12 @@ public class Assembler {
                 break;
         }
     }
-    private void load(String adress, String constant, FileOutputStream writer) {
- //       variables.put(adress,Integer.valueOf(constant));
-        memory.put(adress, freeMemoryIndex);
+    private void load(String address, String constant, FileOutputStream writer) {
+ //       variables.put(address,Integer.valueOf(constant));
+        memory.put(address, freeMemoryIndex);
         Command newCommand = new Command();
         newCommand.A=90;
-        newCommand.B=memory.get(adress);
+        newCommand.B=memory.get(address);
         newCommand.C= Integer.parseInt(constant);
         Long x = 0L;
         Long a = 90L;
@@ -125,21 +133,22 @@ public class Assembler {
             }
         }
         newCommand.hex = newLog.toString();
+        // System.out.println(newCommand.toString());
         logs.add(newCommand);
     }
-    private void read(String adressTo, String adressFrom, String shift, FileOutputStream writer){
-        if(!memory.keySet().contains(adressTo)){
-            memory.put(adressTo,freeMemoryIndex++);
+    private void read(String addressTo, String addressFrom, String shift, FileOutputStream writer){
+        if(!memory.keySet().contains(addressTo)){
+            memory.put(addressTo,freeMemoryIndex++);
         }
         Command newCommand = new Command();
         newCommand.A=1;
-        newCommand.B=memory.get(adressTo);
-        newCommand.C=memory.get(adressFrom);
+        newCommand.B=memory.get(addressTo);
+        newCommand.C=memory.get(addressFrom);
         newCommand.D=Integer.parseInt(shift);
         Long x = 0L;
         Long a = 1L;
-        Long b = Long.valueOf(memory.get(adressTo));
-        Long c = Long.valueOf(memory.get(adressFrom));
+        Long b = Long.valueOf(memory.get(addressTo));
+        Long c = Long.valueOf(memory.get(addressFrom));
         Long d = Long.valueOf(shift);
         x = x | (a << 56);
         x = x | (b << 50);
@@ -170,21 +179,21 @@ public class Assembler {
         }
         newCommand.hex = newLog.toString();
         logs.add(newCommand);
-        memory.put(adressTo, memory.get(adressFrom)+Integer.valueOf(shift));
+        memory.put(addressTo, memory.get(addressFrom)+Integer.valueOf(shift));
     }
-    private void move(String adressTo, String adressFrom, FileOutputStream writer){
-        if(!memory.keySet().contains(adressTo)){
-            memory.put(adressTo,freeMemoryIndex++);
+    private void move(String addressTo, String addressFrom, FileOutputStream writer){
+        if(!memory.keySet().contains(addressTo)){
+            memory.put(addressTo,freeMemoryIndex++);
         }
         Command newCommand = new Command();
         newCommand.A=62;
-        newCommand.B=memory.get(adressTo);
-        newCommand.C=memory.get(adressFrom);
+        newCommand.B=memory.get(addressTo);
+        newCommand.C=memory.get(addressFrom);
 
         Long x = 0L;
         Long a = 62L;
-        Long b = Long.valueOf(memory.get(adressTo));
-        Long c = Long.valueOf(memory.get(adressFrom));
+        Long b = Long.valueOf(memory.get(addressTo));
+        Long c = Long.valueOf(memory.get(addressFrom));
         x = x | (a << 56);
         x = x | (b << 50);
         x = x | (c << 44);
@@ -213,24 +222,24 @@ public class Assembler {
         }
         newCommand.hex = newLog.toString();
         logs.add(newCommand);
-        memory.put(adressTo,memory.get(adressFrom));
+        memory.put(addressTo,memory.get(addressFrom));
     }
-    private void sqrt(String adressTo,String shift, String adressFrom, FileOutputStream writer) {
-        if (!memory.keySet().contains(adressTo)) {
-            memory.put(adressTo, freeMemoryIndex++);
+    private void sqrt(String addressTo,String shift, String addressFrom, FileOutputStream writer) {
+        if (!memory.keySet().contains(addressTo)) {
+            memory.put(addressTo, freeMemoryIndex++);
         }
-        Integer str = (memory.get(adressTo));
-        memory.put(adressTo,memory.get(adressFrom));
+        Integer str = (memory.get(addressTo));
+        memory.put(addressTo,memory.get(addressFrom));
         Command newCommand = new Command();
         newCommand.A=137;
-        newCommand.B=memory.get(adressTo);
+        newCommand.B=memory.get(addressTo);
         newCommand.C=Integer.parseInt(shift);
-        newCommand.D=memory.get(adressFrom);
+        newCommand.D=memory.get(addressFrom);
         Long x = 0L;
         Long a = 137L;
         Long b = Long.valueOf(str);
         Long c = Long.valueOf(Integer.parseInt(shift));
-        Long d = Long.valueOf(memory.get(adressFrom));
+        Long d = Long.valueOf(memory.get(addressFrom));
         x = x | (a << 56);
         x = x | (b << 50);
         x = x | (c << 44);
