@@ -1,5 +1,8 @@
-LOAD a0 1
-LOAD a1 4
-MOVE a3 a1
-SQRT a2 0 a1
+LOAD x 1
+LOAD y 2
+LOAD z 4
+MOVE a x
+SQRT z 5 z
+LOAD b 82
+SQRT b 1 b
 END

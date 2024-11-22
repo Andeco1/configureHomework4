@@ -27,10 +27,12 @@ public class Interpretator {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        executeCommand(getCommand(reader));
-        executeCommand(getCommand(reader));
-        executeCommand(getCommand(reader));
-        executeCommand(getCommand(reader));
+        while (true){
+            String command = getCommand(reader);
+            if(command==null){break;}
+            executeCommand(command);
+        }
+
         output();
         for(int i : memory){
             System.out.println(i);}
@@ -38,7 +40,9 @@ public class Interpretator {
     private String getCommand(FileInputStream reader){
         byte[] command = new byte[8];
         try {
-            reader.read(command);
+            if(reader.read(command)==-1){
+                return null;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -75,8 +79,8 @@ public class Interpretator {
     }
     private void read(String parameters){
         Integer addressTo= Integer.parseInt(parameters.substring(8,14),2);
-        Integer addressFrom =Integer.parseInt(parameters.substring(14,19),2);
-        Integer shift = Integer.parseInt(parameters.substring(20,26),2);
+        Integer addressFrom =Integer.parseInt(parameters.substring(14,20),2);
+        Integer shift = Integer.parseInt(parameters.substring(21,26),2);
         memory.set(addressTo,memory.get(addressFrom+shift));
     }
     private void move(String parameters){
@@ -86,9 +90,9 @@ public class Interpretator {
     }
     private void sqrt(String parameters){
         Integer addressTo= Integer.parseInt(parameters.substring(8,14),2);
-        Integer shift =Integer.parseInt(parameters.substring(14,19),2);
-        Integer addressFrom = Integer.parseInt(parameters.substring(20,26),2);
-        memory.set(addressTo+shift, (int) Math.sqrt(addressFrom));
+        Integer shift =Integer.parseInt(parameters.substring(14,20),2);
+        Integer addressFrom = Integer.parseInt(parameters.substring(20,24),2);
+        memory.set(addressTo+shift, (int) Math.sqrt(memory.get(addressFrom)));
     }
     private void output() {
         HashMap<String, Integer> memoryResult = new HashMap<>();

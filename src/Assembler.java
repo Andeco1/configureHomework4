@@ -133,7 +133,6 @@ public class Assembler {
             }
         }
         newCommand.hex = newLog.toString();
-        // System.out.println(newCommand.toString());
         logs.add(newCommand);
     }
     private void read(String addressTo, String addressFrom, String shift, FileOutputStream writer){
